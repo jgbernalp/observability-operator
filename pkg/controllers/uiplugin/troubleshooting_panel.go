@@ -32,12 +32,15 @@ func createTroubleshootingPanelPluginInfo(plugin *uiv1alpha1.UIPlugin, namespace
 		extraArgs = append(extraArgs, fmt.Sprintf("-features=%s", strings.Join(features, ",")))
 	}
 
+	korrel8rPort := int32(8443)
+
 	pluginInfo := &UIPluginInfo{
 		Image:             image,
 		Name:              plugin.Name,
 		ConsoleName:       "troubleshooting-panel-console-plugin",
 		DisplayName:       "Troubleshooting Panel Console Plugin",
 		ResourceNamespace: namespace,
+		Korrel8rPort:      korrel8rPort,
 		LokiServiceNames:  make(map[string]string),
 		ExtraArgs:         extraArgs,
 		Proxies: []osv1alpha1.ConsolePluginProxy{
@@ -48,7 +51,7 @@ func createTroubleshootingPanelPluginInfo(plugin *uiv1alpha1.UIPlugin, namespace
 				Service: osv1alpha1.ConsolePluginProxyServiceConfig{
 					Name:      korrel8rSvcName,
 					Namespace: namespace,
-					Port:      9443,
+					Port:      korrel8rPort,
 				},
 			},
 		},

@@ -16,6 +16,7 @@ import (
 type UIPluginInfo struct {
 	Image               string
 	Korrel8rImage       string
+	Korrel8rPort        int32
 	LokiServiceNames    map[string]string
 	Name                string
 	ConsoleName         string
