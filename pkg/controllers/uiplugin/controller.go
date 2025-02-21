@@ -24,6 +24,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 
+	persesv1alpha1 "github.com/perses/perses-operator/api/v1alpha1"
 	uiv1alpha1 "github.com/rhobs/observability-operator/pkg/apis/uiplugin/v1alpha1"
 	"github.com/rhobs/observability-operator/pkg/reconciler"
 )
@@ -35,6 +36,10 @@ type resourceManager struct {
 	controller     controller.Controller
 	pluginConf     UIPluginsConfiguration
 	clusterVersion string
+}
+
+type PersesConfiguration struct {
+	Image string
 }
 
 type UIPluginsConfiguration struct {
@@ -75,6 +80,11 @@ const (
 
 // RBAC for logging view plugin
 // +kubebuilder:rbac:groups=loki.grafana.com,resources=application;infrastructure;audit,verbs=get
+
+// RBAC for perses
+// +kubebuilder:rbac:groups=perses.dev,resources=perses;persesdatasources;persesdashboards,verbs=get;list;watch;create;update;delete;patch
+// +kubebuilder:rbac:groups=perses.dev,resources=perses/status;persesdatasources/status;persesdashboards/status,verbs=get;patch;update
+// +kubebuilder:rbac:groups=perses.dev,resources=perses/finalizers;persesdashboards/finalizers;persesdatasources/finalizers;persesdashboards/finalizers,verbs=update
 
 // RBAC for korrel8r
 //+kubebuilder:rbac:groups=apps,resources=daemonsets;deployments;replicasets;statefulsets,verbs=get;list;watch
@@ -123,7 +133,10 @@ func RegisterWithManager(mgr ctrl.Manager, opts Options) error {
 		Owns(&v1.Service{}, generationChanged).
 		Owns(&v1.ServiceAccount{}, generationChanged).
 		Owns(&rbacv1.Role{}, generationChanged).
-		Owns(&rbacv1.RoleBinding{}, generationChanged)
+		Owns(&rbacv1.RoleBinding{}, generationChanged).
+		Owns(&persesv1alpha1.Perses{}, generationChanged).
+		Owns(&persesv1alpha1.PersesDashboard{}, generationChanged).
+		Owns(&persesv1alpha1.PersesDatasource{}, generationChanged)
 
 	if isVersionAheadOrEqual(rm.clusterVersion, "v4.17") {
 		ctrlBuilder.Owns(&osv1.ConsolePlugin{}, generationChanged)

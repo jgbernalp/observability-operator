@@ -63,6 +63,7 @@ type OperatorConfiguration struct {
 	ThanosSidecar   stackctrl.ThanosConfiguration
 	ThanosQuerier   tqctrl.ThanosConfiguration
 	UIPlugins       uictrl.UIPluginsConfiguration
+	Perses          uictrl.PersesConfiguration
 	FeatureGates    FeatureGates
 }
 
@@ -112,6 +113,12 @@ func WithHealthProbeAddr(addr string) func(*OperatorConfiguration) {
 func WithUIPluginImages(images map[string]string) func(*OperatorConfiguration) {
 	return func(oc *OperatorConfiguration) {
 		oc.UIPlugins.Images = images
+	}
+}
+
+func WithPersesImage(image string) func(*OperatorConfiguration) {
+	return func(oc *OperatorConfiguration) {
+		oc.Perses.Image = image
 	}
 }
 
