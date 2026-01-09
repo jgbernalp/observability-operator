@@ -12,8 +12,8 @@ resources:
 
 images:
 - name: observability-operator
-  newName: observability-operator
-  newTag: 1.3.0
+  newName: quay.io/gbernal/observability-operator
+  newTag: 1.4.0-dev-perses-16
 
 patches:
 - patch: |-
