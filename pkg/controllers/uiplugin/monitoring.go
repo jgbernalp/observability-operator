@@ -394,7 +394,7 @@ func newPersesClusterRole() *rbacv1.ClusterRole {
 			},
 			{
 				APIGroups: []string{"perses.dev"},
-				Resources: []string{"persesdashboards", "persesdatasources"},
+				Resources: []string{"persesdashboards", "persesdatasources", "persesglobaldatasources"},
 				Verbs:     []string{"get", "list", "watch", "create", "update", "delete", "patch"},
 			},
 			{
